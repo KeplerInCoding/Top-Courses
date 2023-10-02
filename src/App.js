@@ -1,12 +1,32 @@
-import "./App.css";
+import React, {useState, useEffect}  from "react";
+import Navbar from './components/Navbar';
+import Cards from './components/Cards';
+import Filter from './components/Filter';
+import {filterData, apiUrl} from "./data";
 
 function App() {
+  const [courses, setCourses] = useState(null);
+  useEffect(()=>{
+    const fetchData = async()=>{
+      try{
+          const response = await fetch(apiUrl);
+          const output = await response.json();
+          setCourses(output.data);
+        }
+        catch{
+          console.log("error");
+        }
+      }
+      fetchData();
+  },[]);
   return (
-    <main class="flex justify-center gap-4 flex-col min-h-screen">
-      <h1 class="text-3xl text-center font-bold underline">React & Tailwind CSS Starter Pack</h1>
-      <p class="text-center text-xl">This is a starter pack for React & Tailwind CSS projects.</p>
-      <img src="https://bit.ly/3wsmzTy" alt="meme" class="mx-auto" />
-    </main>
+    <div>
+      <Navbar/>
+
+      <Filter filterData={filterData}/>
+
+      <Cards courses = {courses}/>
+    </div>
   );
 }
 
